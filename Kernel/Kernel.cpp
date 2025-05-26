@@ -1,15 +1,18 @@
 #include "VGA.h"
 #include "GDT.h"
 
+using namespace gdt;
+using namespace vga;
+
 extern "C" void kmain()
 {
-    gdt::init();
-    vga::clear();
-    vga::set_color(vga::Color::YELLOW, vga::Color::BLUE);
-    vga::print("Welcome to HobbyOS!\n");
-    vga::set_color(vga::Color::WHITE, vga::Color::BLACK);
-    vga::print("Hello World!\n");
-    vga::set_cursor(5, 10);
-    vga::set_color(vga::Color::GREEN, vga::Color::BLACK);
-    vga::print("Testing cursor position");
+    init();
+    clear();
+    set_color(Color::YELLOW, Color::BLUE);
+    print("Welcome to HobbyOS!\n");
+    set_color(Color::WHITE, Color::BLACK);
+    print("Hello World!\n");
+    set_cursor(5, 10);
+    set_color(Color::GREEN, Color::BLACK);
+    print("Testing cursor position");
 }
