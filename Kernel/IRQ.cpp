@@ -2,9 +2,18 @@
 #include "Utils.h"
 #include "VGA.h"
 #include "IO.h"
+#include "Keyboard.h"
 
 using namespace vga;
 using namespace IO;
+
+typedef void (*irq_handler_t)(struct regs*);
+static irq_handler_t handlers[16] = {0};
+
+void install_handler(int irq, irq_handler_t handler)
+{
+    handlers[irq] = handler;
+}
 
 extern "C" void pic_remap()
 {
@@ -48,25 +57,36 @@ extern "C" void irq_install()
     idt_set_gate(46, (unsigned long)irq14, sel, flags);
     idt_set_gate(47, (unsigned long)irq15, sel, flags);
 
+    install_handler(1, handle_keyboard_interrupt);
+
     asm volatile("sti");
 }
 
 extern "C" void irq_handler(struct regs *r)
 {
-    set_color(Color::CYAN, Color::BLACK);
-    print("IRQ Received!\n");
+    int irq = r->int_no - 32;
 
-    set_color(Color::WHITE, Color::BLACK);
-    print("IRQ Number: ");
-    char num_str[4];
-    itoa(r->int_no - 32, num_str, 10);
-    print(num_str);
-    print("\n");
+    if (irq < 16 && handlers[irq] != 0)
+    {
+        handlers[irq](r);
+    }
+    else
+    {
+        /*set_color(Color::CYAN, Color::BLACK);
+        print("IRQ Received!\n");
 
-    if (r->int_no >= 40)
-        outb(0xA0, 0x20);
-    outb(0x20, 0x20);
+        set_color(Color::WHITE, Color::BLACK);
+        print("IRQ Number: ");
+        char num_str[4];
+        itoa(r->int_no - 32, num_str, 10);
+        print(num_str);
+        print("\n");*/
 
-    set_color(Color::GREEN, Color::BLACK);
-    print("Interrupt Handled.\n");
+        if (r->int_no >= 40)
+            outb(0xA0, 0x20);
+        outb(0x20, 0x20);
+
+        /*set_color(Color::GREEN, Color::BLACK);
+        print("Interrupt Handled.\n");*/
+    }
 }

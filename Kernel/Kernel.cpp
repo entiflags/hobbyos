@@ -1,6 +1,7 @@
 #include "VGA.h"
 #include "GDT.h"
 #include "IDT.h"
+#include "Keyboard.h"
 
 using namespace gdt;
 using namespace vga;
@@ -9,6 +10,7 @@ extern "C" void kmain()
 {
     init_gdt();
     idt_install();
+    init_keyboard();
     clear();
     set_color(Color::YELLOW, Color::BLUE);
     print("Welcome to HobbyOS!\n");
@@ -18,12 +20,10 @@ extern "C" void kmain()
     set_color(Color::GREEN, Color::BLACK);
     print("Testing cursor position\n\n");
 
-    // test interrupts
-    /*asm volatile("movl $0, %eax\n\t"
-                 "movl $0, %ebx\n\t"
-                 "div %ebx");*/
-    //asm volatile("int $13");
+    asm volatile("sti");
 
-    // test IRQ0 (PIT timer)
-    asm volatile("int $32");
+    while (1)
+    {
+        asm volatile("hlt");
+    }
 }
