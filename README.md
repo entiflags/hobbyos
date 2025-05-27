@@ -13,4 +13,6 @@ Basic try to make an operating system in C++
 	- [X] ISR
 	- [X] IRQ
 - [X] Basic keyboard input
-- [ ] Simple memory management
+- [X] Simple memory management
+- [ ] Basic shell
+- [ ] More work on memory management

@@ -119,4 +119,32 @@ void print(const char* str)
     while (*str)
         putc(*str++);
 }
+
+void print_number(unsigned int num)
+{
+	if (num == 0)
+	{
+		print("0");
+		return;
+	}
+
+	char buffer[32];
+	int i = 0;
+
+	while (num > 0)
+	{
+		buffer[i++] = '0' + (num % 10);
+		num /= 10;
+	}
+
+	char final_buffer[32];
+	int j = 0;
+	for (int k = i - 1; k >= 0; k--)
+	{
+		final_buffer[j++] = buffer[k];
+	}
+	final_buffer[j] = '\0';
+
+	print(final_buffer);
+}
 } // namespace vga

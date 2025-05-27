@@ -1,12 +1,12 @@
 all: hobbyos.iso
 
-hobbyos.bin: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o linker.ld
-	g++ -m32 -T linker.ld -o build/hobbyos.bin -ffreestanding -O2 -nostdlib -no-pie Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o -lgcc
+hobbyos.bin: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o linker.ld
+	g++ -m32 -T linker.ld -o build/hobbyos.bin -ffreestanding -O2 -nostdlib -no-pie Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o -lgcc
 
 Boot/Bootloader.o: Boot/Bootloader.asm
 	nasm -f elf32 Boot/Bootloader.asm -o Boot/Bootloader.o
 
-Kernel/Kernel.o: Kernel/Kernel.cpp Include/VGA.h Include/IO.h Include/GDT.h Include/IDT.h Include/IRQ.h Include/Keyboard.h
+Kernel/Kernel.o: Kernel/Kernel.cpp Include/VGA.h Include/IO.h Include/GDT.h Include/IDT.h Include/IRQ.h Include/Keyboard.h Include/PhysicalMemoryManagement.h
 	g++ -m32 -c Kernel/Kernel.cpp -o Kernel/Kernel.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 
 Kernel/VGA.o: Kernel/VGA.cpp Include/VGA.h Include/IO.h
@@ -34,6 +34,9 @@ Kernel/Utils.o: Kernel/Utils.cpp Include/Utils.h
 
 Kernel/Keyboard.o: Kernel/Keyboard.cpp Include/Keyboard.h Include/VGA.h Include/IO.h
 	g++ -m32 -c Kernel/Keyboard.cpp -o Kernel/Keyboard.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
+
+Kernel/MemoryManagement/PhysicalMemoryManagement.o: Kernel/MemoryManagement/PhysicalMemoryManagement.cpp Include/PhysicalMemoryManagement.h Include/Utils.h
+	g++ -m32 -c Kernel/MemoryManagement/PhysicalMemoryManagement.cpp -o Kernel/MemoryManagement/PhysicalMemoryManagement.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 
 hobbyos.iso: hobbyos.bin Boot/grub.cfg
 	mkdir -p build/isodir/boot/grub

@@ -29,6 +29,7 @@ void clear();
 void set_cursor(std::size_t row, std::size_t col);
 void putc(char c);
 void print(const char* str);
+void print_number(unsigned int num);
 }
 
 #endif // VGA_H
