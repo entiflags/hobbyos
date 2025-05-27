@@ -16,11 +16,14 @@ extern "C" void kmain()
     print("Hello World!\n");
     set_cursor(5, 10);
     set_color(Color::GREEN, Color::BLACK);
-    print("Testing cursor position");
+    print("Testing cursor position\n\n");
 
     // test interrupts
     /*asm volatile("movl $0, %eax\n\t"
                  "movl $0, %ebx\n\t"
                  "div %ebx");*/
     //asm volatile("int $13");
+
+    // test IRQ0 (PIT timer)
+    asm volatile("int $32");
 }

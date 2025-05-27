@@ -3,8 +3,10 @@ ENTRY(_start)
 SECTIONS {
     . = 1M;
 
-    .text : ALIGN(4K) {
+    .multiboot : ALIGN(4K) {
         *(.multiboot)
+    }
+    .text : ALIGN(4K) {
         *(.text)
     }
     .rodata : ALIGN(4K) {
@@ -16,5 +18,8 @@ SECTIONS {
     .bss : ALIGN(4K) {
         *(COMMON)
         *(.bss)
+    }
+    /DISCARD/ : {
+        *(.note.gnu.build-id)
     }
 }

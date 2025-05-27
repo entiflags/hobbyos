@@ -1,4 +1,5 @@
 #include "IDT.h"
+#include "IRQ.h"
 #include "VGA.h"
 #include "Utils.h"
 
@@ -57,6 +58,7 @@ void idt_install()
     idtp.base = (unsigned int)&idt;
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
     isr_install();
+    irq_install();
     idt_load();
 }
 
