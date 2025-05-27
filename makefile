@@ -45,6 +45,6 @@ hobbyos.iso: hobbyos.bin Boot/grub.cfg
 	grub-mkrescue -o hobbyos.iso build/isodir
 
 clean:
-	rm -rf Boot/*.o Kernel/*.o build/* *.iso
+	rm -rf Boot/*.o Kernel/*.o Kernel/MemoryManagement/*.o build/* *.iso
 
 .PHONY: all clean
