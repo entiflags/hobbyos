@@ -7,10 +7,10 @@ Basic try to make an operating system in C++
 - [X] Color support for text output
 - [X] Screen clearing functionality
 - [X] Hardware cursor control
-- [X] Basic tables (ISR, IRQ, GDT, IDT)
+- [ ] Basic tables (ISR, IRQ, GDT, IDT)
 	- [X] GDT
 	- [X] IDT
 	- [X] ISR
 	- [X] IRQ
-- [ ] Basic keyboard input
+- [X] Basic keyboard input
 - [ ] Simple memory management
