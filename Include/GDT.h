@@ -19,7 +19,7 @@ struct GDTPointer {
     uint32_t base;
 } __attribute__((packed));
 
-void init();
+void init_gdt();
 void set_gate(int32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 
 } // namespace gdt

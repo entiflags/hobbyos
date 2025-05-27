@@ -18,7 +18,7 @@ void set_gate(int32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_
     entries[num].access = access;
 }
 
-void init()
+void init_gdt()
 {
     gdt_ptr.limit = (sizeof(GDTEntry) * 5) - 1;
     gdt_ptr.base = (uint32_t)&entries;
