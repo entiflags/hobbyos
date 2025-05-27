@@ -1,7 +1,7 @@
 all: hobbyos.iso
 
-hobbyos.bin: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o linker.ld
-	g++ -m32 -T linker.ld -o build/hobbyos.bin -ffreestanding -O2 -nostdlib Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o -lgcc
+hobbyos.bin: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/Utils.o linker.ld
+	g++ -m32 -T linker.ld -o build/hobbyos.bin -ffreestanding -O2 -nostdlib Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/Utils.o -lgcc
 
 Boot/Bootloader.o: Boot/Bootloader.asm
 	nasm -f elf32 Boot/Bootloader.asm -o Boot/Bootloader.o
@@ -16,12 +16,15 @@ Kernel/GDT.o: Kernel/GDT.cpp Kernel/GDT.asm Include/GDT.h
 	g++ -m32 -c Kernel/GDT.cpp -o Kernel/GDT.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 	nasm -f elf32 Kernel/GDT.asm -o Kernel/GDT_asm.o
 
-Kernel/IDT.o: Kernel/IDT.cpp Kernel/IDT.asm Include/IDT.h
+Kernel/IDT.o: Kernel/IDT.cpp Kernel/IDT.asm Include/IDT.h Include/Utils.h
 	g++ -m32 -c Kernel/IDT.cpp -o Kernel/IDT.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 	nasm -f elf32 Kernel/IDT.asm -o Kernel/IDT_asm.o
 
 Kernel/ISR.o: Kernel/ISR.asm Include/IDT.h
 	nasm -f elf32 Kernel/ISR.asm -o Kernel/ISR.o
+
+Kernel/Utils.o: Kernel/Utils.cpp Include/Utils.h
+	g++ -m32 -c Kernel/Utils.cpp -o Kernel/Utils.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 
 hobbyos.iso: hobbyos.bin Boot/grub.cfg
 	mkdir -p build/isodir/boot/grub

@@ -17,4 +17,10 @@ extern "C" void kmain()
     set_cursor(5, 10);
     set_color(Color::GREEN, Color::BLACK);
     print("Testing cursor position");
+
+    // test interrupts
+    /*asm volatile("movl $0, %eax\n\t"
+                 "movl $0, %ebx\n\t"
+                 "div %ebx");*/
+    //asm volatile("int $13");
 }

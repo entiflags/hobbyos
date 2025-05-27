@@ -1,5 +1,8 @@
-#include <cstring>
 #include "IDT.h"
+#include "VGA.h"
+#include "Utils.h"
+
+using namespace vga;
 
 struct idt_entry idt[256];
 struct idt_ptr idtp;
@@ -41,20 +44,20 @@ extern "C" void isr31();
 
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags)
 {
-	idt[num].base_lo = (base & 0xFFFF);
-	idt[num].base_hi = (base >> 16) & 0xFFFF;
-	idt[num].sel = sel;
-	idt[num].always0 = 0;
-	idt[num].flags = flags;
+    idt[num].base_lo = (base & 0xFFFF);
+    idt[num].base_hi = (base >> 16) & 0xFFFF;
+    idt[num].sel = sel;
+    idt[num].always0 = 0;
+    idt[num].flags = flags;
 }
 
 void idt_install()
 {
-	idtp.limit = (sizeof(struct idt_entry) * 256) - 1;
-	idtp.base = (unsigned int)&idt;
-	memset(&idt, 0, sizeof(struct idt_entry) * 256);
+    idtp.limit = (sizeof(struct idt_entry) * 256) - 1;
+    idtp.base = (unsigned int)&idt;
+    memset(&idt, 0, sizeof(struct idt_entry) * 256);
     isr_install();
-	idt_load();
+    idt_load();
 }
 
 void isr_install()
@@ -96,11 +99,74 @@ void isr_install()
     idt_set_gate(31, (unsigned long)isr31, sel, flags);
 }
 
-// TODO: implement isr_handler
 void isr_handler(struct regs *r)
 {
-    while (1)
+    clear();
+    set_color(Color::RED, Color::BLACK);
+    print("Interrupt Occured!\n");
+
+    const char* interrupt_desc[] = {
+        "Divide by Zero",
+        "Debug",
+        "Non-Maskable Interrupt",
+        "Breakpoint",
+        "Overflow",
+        "Bound Range Exceeded",
+        "Invalid Opcode",
+        "Device Not Available",
+        "Double Fault",
+        "Coprocessor Segment Overrun",
+        "Invalid TSS",
+        "Segment Not Present",
+        "Stack-Segment Fault",
+        "General Protection Fault",
+        "Page Fault",
+        "Reserved",
+        "x87 FPU Error",
+        "Alignment Check",
+        "Machine Check",
+        "SIMD Floating-Point Exception",
+        "Virtualization Exception",
+        "Control Protection Exception",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Reserved",
+        "Hypervisor Injection Exception",
+        "VMM Communication Exception",
+        "Security Exception",
+        "Reserved"
+    };
+
+    set_color(Color::WHITE, Color::BLACK);
+    print("Interrupt Number: ");
+    char num_str[4];
+    itoa(r->int_no, num_str, 10);
+    print(num_str);
+    print("\n");
+
+    if (r->int_no < 32)
     {
-        //placeholder
+        print("Description: ");
+        print(interrupt_desc[r->int_no]);
+        print("\n");
     }
+
+    if (r->err_code != 0)
+    {
+        set_color(Color::YELLOW, Color::BLACK);
+        print("Error Code: ");
+        char err_str[16];
+        itoa(r->err_code, err_str, 16);
+        print("0x");
+        print(err_str);
+        print("\n");
+    }
+
+    set_color(Color::RED, Color::BLACK);
+    print("System Halted.\n");
+    for (;;)
+        asm("hlt");
 }
