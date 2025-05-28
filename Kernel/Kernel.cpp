@@ -34,7 +34,7 @@ extern "C" void kmain(multiboot_info* mboot_ptr)
     print(" KB\nFree Memory: ");
     print_number(get_free_memory() / 1024); // In KB
     print(" KB\n");
-
+    set_color(Color::WHITE, Color::BLACK);
 
     asm volatile("sti");
 

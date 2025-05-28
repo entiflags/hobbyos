@@ -1,0 +1,19 @@
+# Makefile for linking object files and creating ISO
+
+OBJECTS = Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o
+
+all: hobbyos.iso
+
+hobbyos.bin: $(OBJECTS) linker.ld
+	g++ -m32 -T linker.ld -o build/hobbyos.bin -ffreestanding -O2 -nostdlib -no-pie $(OBJECTS) -lgcc
+
+hobbyos.iso: hobbyos.bin Boot/grub.cfg
+	mkdir -p build/isodir/boot/grub
+	cp build/hobbyos.bin build/isodir/boot/hobbyos.bin
+	cp Boot/grub.cfg build/isodir/boot/grub/grub.cfg
+	grub-mkrescue -o hobbyos.iso build/isodir
+
+clean:
+	rm -rf Boot/*.o Kernel/*.o Kernel/MemoryManagement/*.o build/* *.iso
+
+.PHONY: all clean
