@@ -31,5 +31,4 @@ void init_gdt()
 
     gdt_flush((uint32_t)&gdt_ptr);
 }
-
 } // namespace gdt

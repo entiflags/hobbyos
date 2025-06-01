@@ -1,6 +1,6 @@
 # Makefile for linking object files and creating ISO
 
-OBJECTS = Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o
+OBJECTS = Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o #Kernel/Shell.o
 
 all: hobbyos.iso
 

@@ -65,3 +65,20 @@ int strcmp(const char* str1, const char* str2)
     }
     return *(unsigned char*)str1 - *(unsigned char*)str2;
 }
+
+void strcpy(char* dest, const char* src)
+{
+    while (*src != '\0')
+        *dest++ = *src++;
+    *dest = '\0';
+}
+
+int strncmp(const char* str1, const char* str2, unsigned int n)
+{
+    for (unsigned int i = 0; i < n; i++)
+    {
+        if (str1[i] == '\0' || str1[i] != str2[i])
+            return *(unsigned char*)&str1[i] - *(unsigned char*)&str2[i];
+    }
+    return 0;
+}

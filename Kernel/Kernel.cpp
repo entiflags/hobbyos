@@ -3,6 +3,7 @@
 #include "IDT.h"
 #include "Keyboard.h"
 #include "PhysicalMemoryManagement.h"
+//#include "Shell.h"
 
 using namespace gdt;
 using namespace vga;
@@ -37,6 +38,9 @@ extern "C" void kmain(multiboot_info* mboot_ptr)
     set_color(Color::WHITE, Color::BLACK);
 
     asm volatile("sti");
+
+    //initshl();
+    //i tried to make a shell but it didn't work, so this is a placeholder
 
     while (1)
     {

@@ -3,7 +3,7 @@
 Boot/Bootloader.o: Boot/Bootloader.asm
 	nasm -f elf32 Boot/Bootloader.asm -o Boot/Bootloader.o
 
-Kernel/Kernel.o: Kernel/Kernel.cpp Include/VGA.h Include/IO.h Include/GDT.h Include/IDT.h Include/IRQ.h Include/Keyboard.h Include/PhysicalMemoryManagement.h
+Kernel/Kernel.o: Kernel/Kernel.cpp Include/VGA.h Include/IO.h Include/GDT.h Include/IDT.h Include/IRQ.h Include/Keyboard.h Include/PhysicalMemoryManagement.h #Include/Shell.h
 	g++ -m32 -c Kernel/Kernel.cpp -o Kernel/Kernel.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 
 Kernel/VGA.o: Kernel/VGA.cpp Include/VGA.h Include/IO.h
@@ -35,5 +35,8 @@ Kernel/Keyboard.o: Kernel/Keyboard.cpp Include/Keyboard.h Include/VGA.h Include/
 Kernel/MemoryManagement/PhysicalMemoryManagement.o: Kernel/MemoryManagement/PhysicalMemoryManagement.cpp Include/PhysicalMemoryManagement.h Include/Utils.h
 	g++ -m32 -c Kernel/MemoryManagement/PhysicalMemoryManagement.cpp -o Kernel/MemoryManagement/PhysicalMemoryManagement.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
 
+#Kernel/Shell.o: Kernel/Shell.cpp Include/Shell.h Include/VGA.h Include/Keyboard.h Include/PhysicalMemoryManagement.h
+	#g++ -m32 -c Kernel/Shell.cpp -o Kernel/Shell.o -std=c++17 -ffreestanding -O2 -Wall -Wextra -IInclude
+
 .PHONY: compile
-compile: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o
+compile: Boot/Bootloader.o Kernel/Kernel.o Kernel/VGA.o Kernel/GDT.o Kernel/GDT_asm.o Kernel/IDT.o Kernel/IDT_asm.o Kernel/ISR.o Kernel/IRQ_cpp.o Kernel/IRQ_asm.o Kernel/Utils.o Kernel/Keyboard.o Kernel/MemoryManagement/PhysicalMemoryManagement.o #Kernel/Shell.o

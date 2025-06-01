@@ -10,6 +10,15 @@ static uint8_t read_scancode()
     return inb(0x60);
 }
 
+static char last_key = 0;
+
+char get_last_key()
+{
+    char c = last_key;
+    last_key = 0;
+    return c;
+}
+
 static char scancode_to_char(uint8_t scancode)
 {
     switch (scancode)
@@ -60,6 +69,7 @@ static char scancode_to_char(uint8_t scancode)
     case 0x0D: return '=';
     case 0x28: return '\'';
     case 0x29: return '`';
+    case 0x0E: return '\b';
     default: return 0;
     }
 }
